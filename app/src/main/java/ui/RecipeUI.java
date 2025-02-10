@@ -1,9 +1,11 @@
 package ui;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.File;
 
 import data.RecipeFileHandler;
 
@@ -61,8 +63,23 @@ public class RecipeUI {
      * 設問1: 一覧表示機能
      * RecipeFileHandlerから読み込んだレシピデータを整形してコンソールに表示します。
      */
+    String filename = "app/src/main/resources/recipes.txt";
+    File dataFile = new File(filename);
     private void displayRecipes() {
-
+        if (dataFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] pairs = line.split(",");
+                    for (String pair : pairs) {
+                        String[] keyValue = pair.split("=");
+                        if (keyValue[0] == null) {
+                            System.out.println("Recipe Name: " + keyValue[0]);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
