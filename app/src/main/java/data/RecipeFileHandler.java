@@ -20,26 +20,32 @@ public class RecipeFileHandler {
 
     /**
      * 設問1: 一覧表示機能
-     * recipes.txtからレシピデータを読み込み、それをリスト形式で返します。 <br> 
+     * recipes.txtからレシピデータを読み込み、それをリスト形式で返します。 <br>
      * IOExceptionが発生したときは<i>Error reading file: 例外のメッセージ</i>とコンソールに表示します。
      *
      * @return レシピデータ
      */
+
+    /*
+     * recipes.txtのデータを読み込む
+     * BufferedReaderを使って一行ずつデータ取得し、ArrayListの配列に代入していく
+     * 代入された配列をdisplayRecipesメソッドに返す
+     * エラーが出た場合エラーメッセージを出力
+     */
     public ArrayList<String> readRecipes() {
         ArrayList<String> dataList = new ArrayList<>();
-        //BufferedReader consolReader = new BufferedReader(new InputStreamReader(System.in));
         File dataFile = new File(filePath);
 
-         try {
-            if (dataFile.exists()) {
-                BufferedReader reader = new BufferedReader(new FileReader(dataFile));
-                    String line = reader.readLine();
-                    while ((line = reader.readLine()) != null) {
-                        dataList.add(line);
-                    }
-                } 
-        }catch (IOException e) {
-             System.out.println("Error reading file:" + e.getMessage());
+        // recipes.txtからデータを読み込む
+        if (dataFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    dataList.add(line);
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading file:" + e.getMessage());
+            }
         }
         return dataList;
     }

@@ -39,6 +39,7 @@ public class RecipeUI {
                 switch (choice) {
                     case "1":
                         // 設問1: 一覧表示機能
+                        displayRecipes();
                         break;
                     case "2":
                         // 設問2: 新規登録機能
@@ -63,22 +64,41 @@ public class RecipeUI {
      * 設問1: 一覧表示機能
      * RecipeFileHandlerから読み込んだレシピデータを整形してコンソールに表示します。
      */
-    String filename = "app/src/main/resources/recipes.txt";
-    File dataFile = new File(filename);
+
+    /*
+     * データが入っているかの確認
+     * データが入っている場合、出力形式に合して出力
+     * データが入っていなければエラー表示
+     */
     private void displayRecipes() {
-        if (dataFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] pairs = line.split(",");
-                    for (String pair : pairs) {
-                        String[] keyValue = pair.split("=");
-                        if (keyValue[0] == null) {
-                            System.out.println("Recipe Name: " + keyValue[0]);
-                        }
-                    }
-                }
+        /*
+         * recipe変数にreadRecipesメソッドから送られたデータを入れる
+         * 名前と材料で分けるためのリストを準備
+         */
+        ArrayList<String> recipe = this.fileHandler.readRecipes();
+        ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> Ingredients = new ArrayList<>();
+
+        // nameとIngrredientsに名前と材料を分けて代入
+        if (recipe != null) {
+            for (int i = 0; i < recipe.size(); i++) {
+                String[] recipes = recipe.get(i).split(",", 2);
+                name.add(recipes[0]);
+                Ingredients.add(recipes[1]);
             }
+
+            //System.out.println(recipe.get(0));
+            System.out.println("Recipes:");
+            System.out.println("-----------------------------------");
+
+            // name配列とIngredients配列から出力
+            for (int i = 0; i < name.size(); i++) {
+                System.out.println("Recipe Name: " + name.get(i));
+                System.out.println("Main Ingredients: " + Ingredients.get(i));
+                System.out.println("-----------------------------------");
+            }
+        } else {
+            System.out.println("No recipes available.");
         }
     }
 
@@ -103,4 +123,3 @@ public class RecipeUI {
     }
 
 }
-
