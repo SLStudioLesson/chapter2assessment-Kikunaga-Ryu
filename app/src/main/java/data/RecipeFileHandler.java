@@ -1,11 +1,15 @@
 package data;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+import ui.RecipeUI;
 
 public class RecipeFileHandler {
     private String filePath;
@@ -59,11 +63,38 @@ public class RecipeFileHandler {
      * @param ingredients 材料名
      */
     //
+    /*
+     * 元のデータをリストに移しておく(データを追加するときに消えてしまうため)
+     * 入力されたデータを取得しリストに追加する
+     * recipe.txtどうりにデータを入れる
+     */
     public void addRecipe(String recipeName, String ingredients) {
-        // try {
+        File dataFile = new File(filePath);
+        // 元のデータを格納するためのArrayList
+        ArrayList<String> array = new ArrayList<>();
 
-        // } catch (IOException e) {
+        // 元のデータを格納
+        try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                array.add(line);
+            }
+        } catch (IOException ex) {
+            System.out.println("Error reading file: " + ex.getMessage());
+        }
 
-        // }
+        // 入力されたデータを変数に入れArrayListに追加
+        String newRecipe = recipeName + ", " + ingredients;
+        array.add(newRecipe);
+
+        // recipes.txtの表記どうりにデータを入れる
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(dataFile))) {
+            for (String line : array) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
     }
 }

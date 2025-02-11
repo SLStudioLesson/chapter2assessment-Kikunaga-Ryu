@@ -43,6 +43,7 @@ public class RecipeUI {
                         break;
                     case "2":
                         // 設問2: 新規登録機能
+                        addNewRecipe();
                         break;
                     case "3":
                         // 設問3: 検索機能
@@ -80,14 +81,14 @@ public class RecipeUI {
         ArrayList<String> Ingredients = new ArrayList<>();
 
         // nameとIngrredientsに名前と材料を分けて代入
-        if (recipe != null) {
+        if (recipe.size() != 0) {
             for (int i = 0; i < recipe.size(); i++) {
                 String[] recipes = recipe.get(i).split(",", 2);
                 name.add(recipes[0]);
                 Ingredients.add(recipes[1]);
             }
 
-            //System.out.println(recipe.get(0));
+            // System.out.println(recipe.get(0));
             System.out.println("Recipes:");
             System.out.println("-----------------------------------");
 
@@ -108,8 +109,25 @@ public class RecipeUI {
      *
      * @throws java.io.IOException 入出力が受け付けられない
      */
+    /*
+     * 料理名の入力を受け付ける
+     * 材料の入力を受け付ける
+     * 入力されたデータをrecipes.txtに追加
+     */
     private void addNewRecipe() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+        // レシピ名の入力受付
+        System.out.print("Enter recipe name: ");
+        String recipeName = reader.readLine();
+
+        // 材料の入力受付
+        System.out.print("Enter main ingredients (comma separated): ");
+        String ingredients = reader.readLine();
+
+        System.out.println("Recipe added successfully. ");
+
+        fileHandler.addRecipe(recipeName, ingredients);
     }
 
     /**
